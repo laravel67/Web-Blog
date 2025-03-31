@@ -11,10 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('banners', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('post_id')->constrained('posts')->onDelete('cascade');
-            $table->timestamps();
+        Schema::table('posts', function (Blueprint $table) {
+            $table->unsignedBigInteger('views')->default(0)->after('is_faetured');
         });
     }
 
@@ -23,6 +21,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('banners');
+        Schema::table('posts', function (Blueprint $table) {
+            $table->dropColumn('views');
+        });
     }
 };

@@ -23,7 +23,27 @@ class UserResource extends Resource
     {
         return $form
             ->schema([
-                //
+                Forms\Components\TextInput::make('name')
+                    ->required()
+                    ->maxLength(255),
+
+                Forms\Components\TextInput::make('email')
+                    ->email()
+                    ->required()
+                    ->unique(table: 'users', column: 'email', ignoreRecord: true)
+                    ->maxLength(255),
+
+                Forms\Components\TextInput::make('username')
+                    ->required()
+                    ->unique(table: 'users', column: 'username', ignoreRecord: true)
+                    ->maxLength(255),
+
+                Forms\Components\FileUpload::make('avatar')
+                    ->image()
+                    ->directory('avatars'),
+
+                Forms\Components\Textarea::make('bio')
+                    ->maxLength(500),
             ]);
     }
 
@@ -31,12 +51,28 @@ class UserResource extends Resource
     {
         return $table
             ->columns([
+                Tables\Columns\ImageColumn::make('avatar')
+                    ->label('Avatar')
+                    ->circular(),
+
                 Tables\Columns\TextColumn::make('name')
                     ->searchable()
+                    ->sortable()
                     ->label('Nama'),
+
                 Tables\Columns\TextColumn::make('email')
                     ->searchable()
+                    ->sortable()
                     ->label('Email'),
+
+                Tables\Columns\TextColumn::make('username')
+                    ->searchable()
+                    ->sortable()
+                    ->label('Username'),
+
+                Tables\Columns\TextColumn::make('bio')
+                    ->limit(50)
+                    ->label('Bio'),
             ])
             ->filters([
                 //

@@ -9,7 +9,9 @@ use Filament\Forms\Form;
 use Filament\Tables\Table;
 use Illuminate\Support\Str;
 use Filament\Resources\Resource;
+use Filament\Forms\Components\Hidden;
 use Filament\Forms\Components\TextInput;
+use Filament\Forms\Components\FileUpload;
 use Illuminate\Database\Eloquent\Builder;
 use App\Filament\Resources\CategoryResource\Pages;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
@@ -29,19 +31,23 @@ class CategoryResource extends Resource
                     ->label('Nama Kategori')
                     ->placeholder('masukkan nama kategori')
                     ->required()
-                    ->unique()
+                    ->unique(ignoreRecord: true)
                     ->reactive()
                     ->debounce()
                     ->afterStateUpdated(function ($get, $set, ?string $state) {
                         if (!$get('is_slug_changed_manually') && filled($state)) {
                             $set('slug', Str::slug($state));
                         }
-                    }),
-                TextInput::make('slug')
-                    ->label('Generate Slug')
-                    ->placeholder('generate slug kategori')
-                    ->required()
-                    ->readOnly()
+                    })->columnSpanFull(),
+                Hidden::make('slug')
+                    ->default(fn($get) => Str::slug($get('name')))
+                    ->required(),
+                FileUpload::make('banner')
+                    ->label('Banner')
+                    ->image()
+                    ->nullable()
+                    ->directory('banner')
+                    ->columnSpanFull(),
             ]);
     }
 
@@ -49,6 +55,9 @@ class CategoryResource extends Resource
     {
         return $table
             ->columns([
+                Tables\Columns\ImageColumn::make('banner')
+                    ->label('Banner')
+                    ->circular(),
                 Tables\Columns\TextColumn::make('name')
                     ->searchable()
                     ->label('Nama Kategori'),

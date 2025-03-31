@@ -16,6 +16,7 @@ use App\Filament\Resources\PostResource\Pages;
 use Filament\Forms\Components\Card;
 use Filament\Forms\Components\Grid;
 use Filament\Forms\Components\Hidden;
+use Filament\Forms\Components\Toggle;
 use Illuminate\Support\Facades\Auth;
 
 class PostResource extends Resource
@@ -62,6 +63,7 @@ class PostResource extends Resource
                             ->relationship('category', 'name')
                             ->required(),
                     ]),
+                    Toggle::make('is_featured')->label('Jadikan sebagai postingan unggulan?'),
 
 
                     RichEditor::make('content')
@@ -79,19 +81,24 @@ class PostResource extends Resource
         return $table
             ->columns([
                 Tables\Columns\TextColumn::make('title')
+                    ->label('Judul')
                     ->searchable()
-                    ->label('Judul'),
-
+                    ->formatStateUsing(fn($state) => Str::limit($state, 30, '...')),
                 Tables\Columns\TextColumn::make('category.name')
                     ->searchable()
                     ->label('Kategori'),
                 Tables\Columns\TextColumn::make('author.name')
                     ->searchable()
                     ->label('Author'),
-
                 Tables\Columns\TextColumn::make('created_at')
                     ->label('Dibuat')
                     ->dateTime('d M Y'),
+                Tables\Columns\ToggleColumn::make('is_featured')
+                    ->label('Is Featured'),
+                Tables\Columns\TextColumn::make('views')
+                    ->label('Dilihat')
+                    ->formatStateUsing(fn($state) => $state . ' kali')
+                    ->sortable(),
             ])
             ->filters([
                 //
