@@ -46,12 +46,12 @@ class Profile extends Component
         return [
             [
                 'label' => 'Register',
-                'url' => route('register'),
+                'url' => '/admin/register',
                 'icon' => 'heroicon-o-user-plus'
             ],
             [
                 'label' => 'Login',
-                'url' => route('login'),
+                'url' => '/admin/login',
                 'icon' => 'heroicon-o-arrow-right-on-rectangle'
             ],
         ];

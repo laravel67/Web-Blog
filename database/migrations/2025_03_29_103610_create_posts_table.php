@@ -17,8 +17,10 @@ return new class extends Migration
             $table->foreignId('category_id')->constrained('categories')->onDelete('cascade');
             $table->string('title');
             $table->string('slug');
-            $table->string('image');
+            $table->string('image')->nullable();
             $table->longText('content');
+            $table->boolean('is_featured')->default(false);
+            $table->unsignedBigInteger('views')->default(0);
             $table->timestamps();
         });
     }
