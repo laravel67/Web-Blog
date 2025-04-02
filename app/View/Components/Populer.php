@@ -3,8 +3,9 @@
 namespace App\View\Components;
 
 use Closure;
-use Illuminate\Contracts\View\View;
+use App\Models\Post;
 use Illuminate\View\Component;
+use Illuminate\Contracts\View\View;
 
 class Populer extends Component
 {
@@ -21,6 +22,11 @@ class Populer extends Component
      */
     public function render(): View|Closure|string
     {
-        return view('components.populer');
+        $posts = Post::where('views', '!=', 0)
+            ->orderBy('views', 'desc')
+            ->take(4) // Opsional, ambil hanya 5 postingan terpopuler
+            ->get();
+
+        return view('components.populer', compact('posts'));
     }
 }

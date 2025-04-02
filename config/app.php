@@ -13,7 +13,7 @@ return [
     |
     */
 
-    'name' => env('APP_NAME', 'Laravel'),
+    'name' => env('APP_NAME', 'CodeSantri'),
 
     /*
     |--------------------------------------------------------------------------
@@ -121,6 +121,12 @@ return [
     'maintenance' => [
         'driver' => env('APP_MAINTENANCE_DRIVER', 'file'),
         'store' => env('APP_MAINTENANCE_STORE', 'database'),
+    ],
+
+    'aliases' => [
+        // Other aliases...
+
+        'SEOTools' => Artesaos\SEOTools\Facades\SEOTools::class, // Alias untuk SEOTools Facade
     ],
 
 ];

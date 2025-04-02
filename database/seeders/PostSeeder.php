@@ -40,7 +40,7 @@ class PostSeeder extends Seeder
         }
 
         // 🔥 Insert posts
-        for ($i = 1; $i <= 10; $i++) {
+        for ($i = 1; $i <= 100; $i++) {
             $title = $faker->sentence(6);
 
             Post::create([

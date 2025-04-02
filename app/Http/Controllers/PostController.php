@@ -5,7 +5,9 @@ namespace App\Http\Controllers;
 use App\Models\Post;
 use App\Models\User;
 use App\Models\Category;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
+use Artesaos\SEOTools\Facades\SEOTools;
 
 class PostController extends Controller
 {
@@ -44,7 +46,6 @@ class PostController extends Controller
                 break;
         }
 
-        // Additional filters from query parameters
         if ($request->has('search') && !$request->route()->named('posts.search')) {
             $filters['search'] = $request->search;
             $title = "Hasil pencarian: {$filters['search']}";
@@ -69,24 +70,53 @@ class PostController extends Controller
         $authors = User::whereHas('posts')->get();
         $categories = Category::whereHas('posts')->get();
 
+        // SEO Integration
+        SEOTools::setTitle($title);
+        SEOTools::setDescription('Temukan artikel terbaru tentang ' . $title);
+        SEOTools::setCanonical(url()->current());
+
+        SEOTools::opengraph()->setUrl(url()->current());
+        SEOTools::opengraph()->setTitle($title);
+        SEOTools::opengraph()->setDescription('Temukan artikel terbaru tentang ' . $title);
+        SEOTools::opengraph()->addProperty('image', asset('logo.png'));
+
+        SEOTools::twitter()->setSite('@codesantri');
+        SEOTools::twitter()->setTitle($title);
+        SEOTools::twitter()->setDescription('Temukan artikel terbaru tentang ' . $title);
+        SEOTools::twitter()->setImage(asset('logo.png'));
+
         return view('pages.posts', compact('posts', 'title', 'banner', 'authors', 'categories'));
     }
+
 
     public function post(string $slug)
     {
         $post = Post::where('slug', $slug)->firstOrFail();
-        // Increment views counter
         $post->increment('views');
-        // Atau alternatif lebih terkontrol:
-        // $post->timestamps = false; // Optional: jika tidak ingin updated_at berubah
-        // $post->views += 1;
-        // $post->save();
         $relatedPosts = Post::where('category_id', $post->category_id)
-            ->where('id', '!=', $post->id) // Exclude current post
+            ->where('id', '!=', $post->id)
             ->latest()
             ->take(4)
             ->get();
+
         $title = $post->title;
+        $description = Str::limit(strip_tags($post->content), 100);
+        $image = $post->image ? asset('storage/' . $post->image) : asset('logo.png');
+
+        SEOTools::setTitle(config('app.name') . ' | ' . $title);
+        SEOTools::setDescription($description);
+        SEOTools::setCanonical(url()->current());
+
+        SEOTools::opengraph()->setUrl(url()->current());
+        SEOTools::opengraph()->setTitle($title);
+        SEOTools::opengraph()->setDescription($description);
+        SEOTools::opengraph()->addProperty('image', $image);
+        SEOTools::opengraph()->addProperty('type', 'article');
+
+        SEOTools::twitter()->setSite('@codesantri');
+        SEOTools::twitter()->setTitle(config('app.name') . ' | ' . $title);
+        SEOTools::twitter()->setDescription($description);
+        SEOTools::twitter()->setImage($image);
         return view('pages.post', compact('post', 'title', 'relatedPosts'));
     }
 }
