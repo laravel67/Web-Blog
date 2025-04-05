@@ -18,7 +18,12 @@ class PostSeeder extends Seeder
         // 🔥 Buat user dummy kalau belum ada
         $user = User::firstOrCreate(
             ['email' => 'admin@gmail.com'],
-            ['name' => 'Murtaki', 'username' => 'murtaki99', 'password' => bcrypt('password')]
+            [
+                'name' => 'Murtaki',
+                'username' => 'murtaki99',
+                'password' => bcrypt('password'),
+                'email_verified_at' => now()
+            ]
         );
 
         // 🔥 Insert unique categories

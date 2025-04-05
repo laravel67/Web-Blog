@@ -35,8 +35,8 @@ class Register extends BaseRegister
             ->required()
             ->maxLength(10)
             ->regex('/^[a-z0-9]+$/') // Hanya huruf kecil dan angka
-            ->rule(Rule::unique('users', 'username')) // Pastikan unik di database
-            ->live() // Agar validasi langsung berjalan saat diketik
+            ->rule(Rule::unique('users', 'username'))
+            ->live()
             ->placeholder('Masukkan username (huruf kecil, tanpa spasi, max 10)');
     }
 }

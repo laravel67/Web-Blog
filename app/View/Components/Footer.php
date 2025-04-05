@@ -3,11 +3,12 @@
 namespace App\View\Components;
 
 use Closure;
+use App\Models\Post;
 use App\Models\Category;
 use Illuminate\View\Component;
 use Illuminate\Contracts\View\View;
 
-class MenuBar extends Component
+class Footer extends Component
 {
     /**
      * Create a new component instance.
@@ -22,7 +23,11 @@ class MenuBar extends Component
      */
     public function render(): View|Closure|string
     {
+        $posts = Post::where('is_featured', true)
+            ->latest()
+            ->limit(5)
+            ->get();
         $categories = Category::latest()->get();
-        return view('components.menu-bar', compact('categories'));
+        return view('components.footer', compact('categories', 'posts'));
     }
 }

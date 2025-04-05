@@ -67,3 +67,5 @@ document.addEventListener('scroll', closeModal);
                 menu.classList.remove('opacity-100', 'scale-100');
             }
         });
+
+        

@@ -1,9 +1,10 @@
+@php use Illuminate\Support\Facades\Auth; @endphp
 <div class="relative">
     <button id="user-menu-button" class="relative flex rounded-full bg-white ring-1 ring-primary">
         @auth
-        <x-avatar :img="Auth::user()->avatar_url" :alt="Auth::user()->name" class="h-7 w-7 rounded-full"/>
+        <x-avatar :img="Auth::user()->avatar_url" :alt="Auth::user()->name" class="h-5 w-5 rounded-full"/>
         @else
-        <img src="{{ asset('default-avatar.png') }}" class="h-7 w-7 rounded-full"/>
+        <img src="{{ asset('default-avatar.png') }}" class="h-5 w-5 rounded-full"/>
         @endauth
     </button>
 

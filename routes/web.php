@@ -13,6 +13,8 @@ Route::get('/posts/author/{username}', [PostController::class, 'posts'])->name('
 Route::get('/posts/popular', [PostController::class, 'posts'])->name('posts.popular');
 Route::get('/posts/unggulan', [PostController::class, 'posts'])->name('posts.featured');
 Route::get('/posts/search', [PostController::class, 'posts'])->name('posts.search');
+Route::post('/post/comment', [PostController::class, 'comment'])->name('post.comment');
+
 
 Route::fallback(function () {
     return redirect()->back();
