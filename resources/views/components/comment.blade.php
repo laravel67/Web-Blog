@@ -33,18 +33,6 @@ use Illuminate\Support\Str;
         <p class="text-sm text-gray-800 whitespace-pre-line leading-relaxed mt-1">
             {{ $comment->content }}
         </p>
-
-        <!-- Tombol Aksi (jika pemilik) -->
-        @if(auth()->check() && auth()->user()->name === $comment->name)
-        <div class="mt-3 flex gap-3 text-xs font-medium">
-            <form action="{{ route('comment.destroy', $comment->id) }}" method="POST"
-                onsubmit="return confirm('Yakin ingin menghapus komentar ini?')">
-                @csrf
-                @method('DELETE')
-                <button type="submit" class="text-red-600 hover:underline">Hapus</button>
-            </form>
-        </div>
-        @endif
     </div>
 </div>
 @empty

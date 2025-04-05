@@ -15,7 +15,6 @@ Route::get('/posts/unggulan', [PostController::class, 'posts'])->name('posts.fea
 Route::get('/posts/search', [PostController::class, 'posts'])->name('posts.search');
 Route::post('/post/comment', [PostController::class, 'comment'])->name('post.comment');
 
-
 Route::fallback(function () {
     return redirect()->back();
 });
